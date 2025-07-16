@@ -5,6 +5,19 @@ import { Card } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
+
+interface RolePermission {
+    id: number;
+    roleId: number;
+    role?: { name?: string };
+    module?: { name?: string };
+    canCreate: boolean;
+    canRead: boolean;
+    canUpdate: boolean;
+    canDelete: boolean;
+}
+
+
 export default function RolesTable() {
     const [roles, setRoles] = useState([]);
     const [availableRoles, setAvailableRoles] = useState([]);
@@ -25,8 +38,9 @@ export default function RolesTable() {
     }, []);
 
     const filteredRoles = selectedRoleId
-        ? roles.filter(r => r.roleId === selectedRoleId)
-        : roles;
+    ? roles.filter(r => r.roleId === selectedRoleId)
+    : roles;
+
 
     const handlePermissionChange = async (id, field, value) => {
         setRoles(prev =>prev.map(role => role.id === id  ? { ...role, [field]: value } : role));
