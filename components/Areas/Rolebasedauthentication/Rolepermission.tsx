@@ -3,48 +3,67 @@
 import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 
 interface RolePermission {
     id: number;
     roleId: number;
-    role?: { name?: string };
-    module?: { name?: string };
+    role?: {
+        name?: string;
+    };
+    module?: {
+        name?: string;
+    };
     canCreate: boolean;
     canRead: boolean;
     canUpdate: boolean;
     canDelete: boolean;
 }
 
+interface AvailableRole {
+    id: number;
+    name: string;
+}
 
 export default function RolesTable() {
-    const [roles, setRoles] = useState([]);
-    const [availableRoles, setAvailableRoles] = useState([]);
-    const [selectedRoleId, setSelectedRoleId] = useState(null);
+    const [roles, setRoles] = useState<RolePermission[]>([]);
+    const [availableRoles, setAvailableRoles] = useState<AvailableRole[]>([]);
+    const [selectedRoleId, setSelectedRoleId] = useState<number | null>(null);
 
     useEffect(() => {
         fetch('http://localhost:8000/api/get-roles')
-            .then(res => res.json())
-            .then(resData => setRoles(resData.data || []))
+            .then((res) => res.json())
+            .then((resData) => setRoles(resData.data || []))
             .catch(console.error);
     }, []);
 
     useEffect(() => {
         fetch('http://localhost:8000/api/get-roles-name')
-            .then(res => res.json())
-            .then(data => setAvailableRoles(data.data || []))
+            .then((res) => res.json())
+            .then((data) => setAvailableRoles(data.data || []))
             .catch(console.error);
     }, []);
 
     const filteredRoles = selectedRoleId
-    ? roles.filter(r => r.roleId === selectedRoleId)
-    : roles;
+        ? roles.filter((r) => r.roleId === selectedRoleId)
+        : roles;
 
-
-    const handlePermissionChange = async (id, field, value) => {
-        setRoles(prev =>prev.map(role => role.id === id  ? { ...role, [field]: value } : role));
-
+    const handlePermissionChange = async (
+        id: number,
+        field: keyof RolePermission,
+        value: boolean
+    ) => {
+        setRoles((prev) =>
+            prev.map((role) =>
+                role.id === id ? { ...role, [field]: value } : role
+            )
+        );
 
         try {
             const res = await fetch(`http://localhost:8000/api/update-permission`, {
@@ -54,16 +73,16 @@ export default function RolesTable() {
             });
             const result = await res.json();
             if (result.status !== 200) {
-                console.error("Server responded with non-200 status", result);
+                console.error('Server responded with non-200 status', result);
             }
         } catch (error) {
-            console.error("Error updating permission", error);
+            console.error('Error updating permission', error);
         }
     };
 
-    const renderSwitch = (row, field) => (
+    const renderSwitch = (row: RolePermission, field: keyof RolePermission) => (
         <Switch
-            checked={row[field]}
+            checked={!!row[field]}
             onCheckedChange={(val) => handlePermissionChange(row.id, field, val)}
         />
     );
@@ -72,12 +91,15 @@ export default function RolesTable() {
         <Card className="p-6 space-y-4">
             <h3 className="text-xl font-semibold">Manage Permissions by Role</h3>
 
-            <Select value={selectedRoleId?.toString()} onValueChange={(val) => setSelectedRoleId(Number(val))}>
+            <Select
+                value={selectedRoleId?.toString()}
+                onValueChange={(val) => setSelectedRoleId(Number(val))}
+            >
                 <SelectTrigger className="w-[300px]">
                     <SelectValue placeholder="Select a Role" />
                 </SelectTrigger>
                 <SelectContent>
-                    {availableRoles.map(role => (
+                    {availableRoles.map((role) => (
                         <SelectItem key={role.id} value={role.id.toString()}>
                             {role.name}
                         </SelectItem>
@@ -89,7 +111,6 @@ export default function RolesTable() {
                 <table className="min-w-full table-auto border rounded-md">
                     <thead className="bg-gray-100 dark:bg-gray-800">
                         <tr className="text-left">
-                            {/* <th className="p-2 border">ID</th> */}
                             <th className="p-2 border">Role</th>
                             <th className="p-2 border">Module</th>
                             <th className="p-2 border">Create</th>
@@ -101,7 +122,6 @@ export default function RolesTable() {
                     <tbody>
                         {filteredRoles.map((row) => (
                             <tr key={row.id} className="even:bg-gray-50 dark:even:bg-gray-900">
-                                {/* <td className="p-2 border">{row.id}</td> */}
                                 <td className="p-2 border">{row.role?.name || '-'}</td>
                                 <td className="p-2 border">{row.module?.name || '-'}</td>
                                 <td className="p-2 border">{renderSwitch(row, 'canCreate')}</td>
