@@ -1,4 +1,4 @@
-import RolesTable from "@/components/Areas/Rolebasedauthentication/Rolepermission";
+
 import { Metadata } from "next";
 
 
@@ -13,6 +13,6 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
    <>
-     <RolesTable></RolesTable>
+     
    </>);
 }
