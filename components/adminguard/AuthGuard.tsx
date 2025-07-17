@@ -15,7 +15,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
         return;
       }
       try {
-        const res = await fetch(`http://localhost:8000/api/protected-check`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/protected-check`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
