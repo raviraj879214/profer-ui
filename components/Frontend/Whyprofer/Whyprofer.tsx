@@ -109,7 +109,7 @@ function VerificationChecks() {
   );
 }
 
-function CheckItem({ title, description }) {
+function CheckItem({ title, description }: { title: string; description: string }) {
   return (
     <div className="flex space-x-4">
       <div className="w-8 h-8 bg-sky-400 rounded-full flex items-center justify-center">
@@ -132,6 +132,7 @@ function CheckItem({ title, description }) {
     </div>
   );
 }
+
 
 function ProfileSection() {
   return (
