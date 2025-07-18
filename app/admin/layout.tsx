@@ -13,7 +13,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   return (
     <div className="relative flex flex-col min-h-screen bg-white font-sans overflow-hidden">
       <SidebarProvider>
-        <Header />
+        {/* <Header /> */}
 
         {/* Mobile Sidebar */}
         <div className="flex flex-1 flex-col md:flex-row relative z-10">
@@ -61,7 +61,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </AuthGuard>
         </div>
 
-        <Footer />
+        {/* <Footer /> */}
       </SidebarProvider>
     </div>
   );
