@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Header } from "@/components/Areas/shared/Header";
-import { Footer } from "@/components/Areas/shared/Footer";
+import { Header } from "@/components/Frontend/shared/Header";
+import { Footer } from "@/components/Frontend/shared/Footer";
+
+
+
+
+
 
 
 
@@ -21,9 +26,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-      
+      <Header></Header>
+
+
         {children}
-     
+
+        
+      <Footer></Footer>
       </body>
     </html>
   );

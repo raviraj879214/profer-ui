@@ -3,9 +3,7 @@ import { Logo } from "./Logo";
 
 
 
-
-
-export  function Footer() {
+export function Footer() {
   return (
     <footer className="bg-gray-900 text-gray-200 py-10 px-6 flex flex-wrap items-center justify-between">
         <div className="flex items-center space-x-2">
